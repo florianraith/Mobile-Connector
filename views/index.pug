@@ -1,0 +1,16 @@
+extends layout.pug
+
+block content
+    h1 Home
+    hr
+    form(action="/create", method="POST")
+        input(type="hidden", name="_csrf", value=csrf)
+        input(type="hidden", name="isMobile", value="false")
+        button.btn(type="submit") Create Channel
+    
+    if channels.length !== 0
+        p.mt-5 Exsisting channels:
+        ul
+            each id in channels
+                li
+                    a(href="/channel/desktop/" + id) Channel: #{id}

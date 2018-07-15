@@ -1,0 +1,13 @@
+extends layout
+
+block meta
+    meta(name="channelID", content=id)
+
+block content
+    h1 Mobile
+    p channel-id: #{id}
+    button.btn(onclick="calibrateRotation();") Calibrate Rotation
+
+block scripts
+    script(src="/socket.io/socket.io.js")
+    script(src="/assets/js/mobile.js")

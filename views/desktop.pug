@@ -1,0 +1,20 @@
+extends layout.pug
+
+block meta
+    meta(name="channelID", content=id)
+
+block content
+    h1 Channel
+
+    a(href="/") Back Home
+
+    p channel-id: #{id}
+
+    p#mobile-connection
+   
+    button.btn(type="submit", onclick="deleteChannel();") Delete This Channel
+
+block scripts
+    script(src="/socket.io/socket.io.js")
+    script(src="/assets/js/p5.min.js")
+    script(src="/assets/js/desktop.js")
