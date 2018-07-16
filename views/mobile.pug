@@ -4,9 +4,21 @@ block meta
     meta(name="channelID", content=id)
 
 block content
-    h1 Mobile
-    p channel-id: #{id}
-    button.btn(onclick="calibrateRotation();") Calibrate Rotation
+    h1 Mobile-Channel
+      small.text-secondary  ##{id}
+      
+    hr
+
+    table
+        tbody
+            tr
+                td Desktop connection:
+                td.pl-3#desktop-connection null
+            tr
+                td Mobile connection:
+                td.pl-3#mobile-connection null
+
+    button#calibrate-rotation.btn.mt-3 Calibrate Rotation
 
 block scripts
     script(src="/socket.io/socket.io.js")

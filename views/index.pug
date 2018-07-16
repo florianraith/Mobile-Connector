@@ -2,6 +2,7 @@ extends layout.pug
 
 block content
     h1 Home
+
     hr
     form(action="/create", method="POST")
         input(type="hidden", name="_csrf", value=csrf)
