@@ -1,3 +1,4 @@
 module.exports = {
-    userName: require('./userName')
+    userName: require('./userName'),
+    isMobile: require('./isMobile'),
 };

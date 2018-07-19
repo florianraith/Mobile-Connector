@@ -6,6 +6,7 @@
     var $btnCalibrateRotation = document.getElementById('calibrate-rotation');
 
     // variables
+    var youTemplate = ' <span class="text-secondary"><em>(you)</em></span>';
     var orientation =  { alpha: 0, beta: 0, gamma: 0 };
 
     // setup socket handler
@@ -13,8 +14,18 @@
 
         joinChannel: function(data) {
             var connection = data.connection;
-            if('desktop' in connection) $desktopConnection.innerHTML = connection.desktop.name;
-            if('mobile' in connection) $mobileConnection.innerHTML = connection.mobile.name;
+
+            if('desktop' in connection) {
+                $desktopConnection.innerHTML = connection.desktop.name;
+                if(socket.id === connection.desktop.id) $desktopConnection.innerHTML += youTemplate;
+                desktopConnected = true;
+            }
+
+            if('mobile' in connection) {
+                $mobileConnection.innerHTML = connection.mobile.name;
+                if(socket.id === connection.mobile.id) $mobileConnection.innerHTML += youTemplate;
+                mobileConnected = true;
+            }
         },
 
         redirect: function() {

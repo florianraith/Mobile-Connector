@@ -27,6 +27,7 @@ app.use(bodyParser.json());
 app.use(session);
 app.use(csrf({ cookie: true }));
 app.use(middleware.userName);
+app.use(middleware.isMobile);
 
 
 // register routes

@@ -6,9 +6,10 @@ module.exports = {
         const id = req.params.id;
         const csrf = req.csrfToken();
         const title = `Desktop - ${id}`;
+        const userName = req.session.userName;
 
         const channel = channels.get(id);
-
+        
         // redirect if the channel does not exsist
         if(!channel) {
             res.redirect('/');
@@ -31,48 +32,55 @@ module.exports = {
         }
 
         // render page
-        req.session.channelID = id;
-        res.render('desktop', { id, csrf, title });
+        req.session.channelID = channel.id;
+        res.render('desktop', { id, csrf, title, userName });
     },
 
     mobile(req, res) {
         const id = req.params.id;
         const title = `Mobile - ${id}`;
 
+        const userName = req.session.userName;
         const channel = channels.get(id);
 
+        
         // redirect if the channel does not exsist
         if(!channel) {
             res.redirect('/');
             return;
         }
-
+        
         // redirect if the channel is already full
         if('desktop' in channel.connection && 'mobile' in channel.connection) {
             res.redirect('/');
             return;
         }
-
+        
         // redirect if the client is a desktop or the client is a mobile and a mobile already is in the channel
         if('isMobile' in req.session) {
             const isMobile = req.session.isMobile === 'true';
-            if(!isMobile || (isMobile && 'mobile' in channel.connection)) {
+            if(!isMobile) {
+                res.redirect('/');
+                return; 
+            }
+            
+            if(isMobile && 'mobile' in channel.connection) {
                 res.redirect('/');
                 return;
             }
         }
 
         // render page
-        res.render('mobile', { id, title });
+        req.session.channelID = channel.id;
+        res.render('mobile', { id, title, userName });
     },
 
     create(req, res) {
         const channel = channels.create();
-        const isMobile = req.body.isMobile;
+        const isMobile = req.session.isMobile;
+        const connectionType = isMobile === 'true' ? 'mobile' : 'desktop';
 
-        req.session.isMobile = isMobile;
-
-        res.redirect(`/channel/desktop/${channel.id}`);
+        res.redirect(`/channel/${connectionType}/${channel.id}`);
     },
 
     

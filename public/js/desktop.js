@@ -7,14 +7,15 @@
     var $channelID = document.head.querySelector('[name="channelID"]');
 
     // variables
+    var youTemplate = ' <span class="text-secondary"><em>(you)</em></span>';
     var channelID = $channelID.content;
     var orientation = { alpha: 0, beta: 0, gamma: 0 };
     var offset = { alpha: 0, beta: 0, gamma: 0 };
+    var socket;
 
     // redirect if client is mobile
     if(window.isMobile) {
         window.location.replace(window.location.origin + '/channel/mobile/' + channelID);
-        return;
     }
 
     // setup socket handler
@@ -22,8 +23,18 @@
 
         joinChannel: function(data) {
             var connection = data.connection;
-            if('desktop' in connection) $desktopConnection.innerHTML = connection.desktop.name;
-            if('mobile' in connection) $mobileConnection.innerHTML = connection.mobile.name;
+
+            if('desktop' in connection) {
+                $desktopConnection.innerHTML = connection.desktop.name;
+                if(socket.id === connection.desktop.id) $desktopConnection.innerHTML += youTemplate;
+                desktopConnected = true;
+            }
+
+            if('mobile' in connection) {
+                $mobileConnection.innerHTML = connection.mobile.name;
+                if(socket.id === connection.mobile.id) $mobileConnection.innerHTML += youTemplate;
+                mobileConnected = true;
+            }
         },
 
         deviceOrientation: function(data) {
@@ -41,7 +52,7 @@
     };
 
     // initialize socket and listen
-    var socket = io();
+    socket = io();
     socket.emit('join-channel', { isMobile: false });
     socket.on('join-channel', socketHandler.joinChannel);
     socket.on('device-orientation', socketHandler.deviceOrientation);
@@ -53,6 +64,8 @@
         socket.emit('delete-channel');
     }
 
+
+
     // sketch
     new p5(function(sketch) {
 
@@ -60,7 +73,7 @@
             sketch.createCanvas(600, 400, sketch.WEBGL);
     
         }
-    
+
         sketch.draw = function() {
             sketch.background(255);
             sketch.rotateX(sketch.radians(orientation.beta - offset.beta));
