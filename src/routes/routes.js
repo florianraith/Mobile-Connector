@@ -11,6 +11,7 @@ module.exports = {
 
     newUsername(req, res) {
         const backURL = req.header('Referer') || '/';
+        req.session.oldUserName = req.session.userName;
         req.session.userName = '';
         res.redirect(backURL);
     }

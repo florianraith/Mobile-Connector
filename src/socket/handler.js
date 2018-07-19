@@ -1,3 +1,4 @@
+const log      = require('debug')('socket');
 const channels = require('../channels');
 
 module.exports = (io, socket) => ({
@@ -32,7 +33,7 @@ module.exports = (io, socket) => ({
         }
 
 
-        console.log(`user ${socket.user.name} connected to channel ${socket.channel}`);
+        log('user %o connected to channel %o', socket.user.name, channel.id);
         io.in(socket.channel).emit('join-channel', { user: socket.user, connection: channel.connection });
     },
 
@@ -44,18 +45,18 @@ module.exports = (io, socket) => ({
         if(channel.connection.desktop === socket.user || channel.connection.mobile === socket.user) {
             channels.delete(socket.channel);
         
-            console.log(`deleting channel ${socket.channel}`);
+            log('deleting channel %o', socket.channel);
             socket.in(socket.channel).emit('redirect');
             return;
         }
 
-        console.log(`user ${socket.user.name} disconnected to channel ${socket.channel}`);
+        log('user %o disconnected to channel %o', socket.user.name, socket.channel);
     },
 
     deleteChannel() {
         channels.delete(socket.channel);
 
-        console.log(`deleting channel ${socket.channel}`);
+        log('deleting channel %o', socket.channel);
         io.in(socket.channel).emit('redirect');
     },
 

@@ -5,8 +5,11 @@ const cookieParserModule = require('cookie-parser');
 const bodyParser         = require('body-parser');
 const sessionModule      = require('express-session');
 const csrf               = require('csurf');
+const morgan             = require('morgan');
 const router             = require('./routes');
-const middleware         = require('./middleware')
+const middleware         = require('./middleware');
+const socket             = require('./socket');
+
 
 const app          = express();
 const cookieParser = cookieParserModule();
@@ -26,6 +29,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(session);
 app.use(csrf({ cookie: true }));
+app.use(middleware.logger);
 app.use(middleware.userName);
 app.use(middleware.isMobile);
 
@@ -33,10 +37,17 @@ app.use(middleware.isMobile);
 // register routes
 app.use('/', router);
 
+
+// register middleware after routing
+app.use(middleware.catch404);
+app.use(middleware.errorHandler);
+
+
 // create http server
 const server = http.Server(app);
 
+
 // handle sockets
-require('./socket')(server, cookieParser, session);
+socket(server, cookieParser, session);
 
 module.exports = server;

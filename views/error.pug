@@ -1,0 +1,9 @@
+extends layout.pug
+
+block content
+    h1 #{message}
+        small.text-secondary  #{error.status}
+
+    hr
+
+    pre #{error.stack}
