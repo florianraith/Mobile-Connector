@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "cross-env DEBUG=server,http,socket,userName nodemon index.js"
+    "build": "./node_modules/.bin/babel src --copy-files --out-dir dist --presets=@babel/preset-env",
+    "watch": "./node_modules/.bin/nodemon --watch src --exec \"./node_modules/.bin/babel-node src --presets=@babel/preset-env\"",
+    "dev": "./node_modules/.bin/cross-env DEBUG=server,http,socket,userName npm run watch"
   },
   "author": "Florian Raith",
   "license": "ISC",
@@ -21,7 +22,11 @@
     "socket.io": "^2.1.1"
   },
   "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.5",
+    "@babel/node": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
     "cross-env": "^5.2.0",
-    "nodemon": "^1.18.1"
+    "nodemon": "^1.19.0"
   }
 }

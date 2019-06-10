@@ -1,6 +1,6 @@
-const channels = require('../channels');
+import channels from '../channels';
 
-module.exports = {
+export default {
 
     dekstop(req, res) {
         const id = req.params.id;

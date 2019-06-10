@@ -1,7 +1,9 @@
-module.exports = {
-    userName:     require('./userName'),
-    isMobile:     require('./isMobile'),
-    catch404:     require('./catch404'),
-    errorHandler: require('./errorHandler'),
-    logger:       require('./logger'),
+import userName from './userName';
+import isMobile from './isMobile';
+import catch404 from './catch404';
+import errorHandler from './errorHandler';
+import logger from './logger';
+
+export default {
+    userName, isMobile, catch404, errorHandler, logger
 };

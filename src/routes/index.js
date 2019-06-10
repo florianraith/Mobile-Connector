@@ -1,6 +1,6 @@
-const express = require('express');
-const channel = require('./channel');
-const routes  = require('./routes');
+import express from 'express';
+import channel from './channel';
+import routes from './routes';
 
 const router = express.Router();
 
@@ -13,4 +13,4 @@ router.get('/channel/mobile/:id',  channel.mobile);
 router.post('/channel/create',     channel.create);
 
 router.get('/404', (req, res) => res.render('404'));
-module.exports = router;
+export default router;

@@ -1,6 +1,7 @@
-const server = require('./src/server');
-const debug  = require('debug')('server');
+import server from './server';
+import Debug from 'debug';
 
+const debug = Debug('server');
 debug('booting %o', 'Mobile-Connector');
 
 // run server

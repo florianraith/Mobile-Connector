@@ -1,12 +1,14 @@
-module.exports = {
+import channels from '../channels';
+
+export default {
 
     index(req, res) {
         const csrf = req.csrfToken();
-        const channels = require('../channels').ids();
+        const channelIDs = channels.ids();
         const userName = req.session.userName;
         const title = 'Home';
 
-        res.render('index', { csrf, channels, userName, title });
+        res.render('index', { csrf, channels: channelIDs, userName, title });
     },
 
     newUsername(req, res) {

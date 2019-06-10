@@ -1,7 +1,7 @@
-const sio            = require('socket.io');
-const handlerFactory = require('./handler');
+import sio from 'socket.io';
+import handlerFactory from './handler'; 
 
-module.exports = (server, cookieParser, session) => {
+export default (server, cookieParser, session) => {
     
     // configure socket.io
     const io = sio(server);

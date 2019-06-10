@@ -1,7 +1,9 @@
-const log      = require('debug')('userName');
+import Debug from 'debug';
+
+const log = Debug('userName');
 const namePool = ['Freddie', 'Damon', 'Tamara', 'Mitchell', 'Albert', 'Shane', 'Simon'];
 
-module.exports = (req, res, next) => {
+export default (req, res, next) => {
     if(!('userName' in req.session) || req.session.userName === '') {
         
         const randomName = namePool[Math.floor(Math.random() * namePool.length)];

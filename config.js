@@ -1,6 +1,6 @@
-var fs = require('fs');
+const fs = require('fs');
 
-module.exports = {
+module.exports =  {
     https: process.env.NODE_ENV !== 'production',
     httpsOptions: {
         key: fs.readFileSync('./cert/server.key', 'utf-8'),

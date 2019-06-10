@@ -1,7 +1,9 @@
-const log      = require('debug')('socket');
-const channels = require('../channels');
+import Debug from 'debug';
+import channels from '../channels';
 
-module.exports = (io, socket) => ({
+const log = Debug('socket');
+
+export default (io, socket) => ({
 
     joinChannel(data) {
         const isMobile = data.isMobile;

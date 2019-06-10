@@ -1,4 +1,4 @@
-module.exports = (req, res, next) => {
+export default (req, res, next) => {
 
     if('mobile' in req.query) {
         req.session.isMobile = req.query.mobile;        
