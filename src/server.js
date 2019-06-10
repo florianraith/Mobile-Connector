@@ -1,6 +1,7 @@
 const path               = require('path');
 const express            = require('express');
 const http               = require('http');
+const https              = require('https');
 const cookieParserModule = require('cookie-parser');
 const bodyParser         = require('body-parser');
 const sessionModule      = require('express-session');
@@ -9,6 +10,7 @@ const morgan             = require('morgan');
 const router             = require('./routes');
 const middleware         = require('./middleware');
 const socket             = require('./socket');
+const config             = require('../config');
 
 
 const app          = express();
@@ -44,7 +46,7 @@ app.use(middleware.errorHandler);
 
 
 // create http server
-const server = http.Server(app);
+const server = config.https ? https.createServer(config.httpsOptions, app) : http.createServer(app);
 
 
 // handle sockets
