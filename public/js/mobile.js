@@ -15,13 +15,13 @@
         joinChannel: function(data) {
             var connection = data.connection;
 
-            if('desktop' in connection) {
+            if(connection.desktop !== null) {
                 $desktopConnection.innerHTML = connection.desktop.name;
                 if(socket.id === connection.desktop.id) $desktopConnection.innerHTML += youTemplate;
                 desktopConnected = true;
             }
 
-            if('mobile' in connection) {
+            if(connection.mobile !== null) {
                 $mobileConnection.innerHTML = connection.mobile.name;
                 if(socket.id === connection.mobile.id) $mobileConnection.innerHTML += youTemplate;
                 mobileConnected = true;

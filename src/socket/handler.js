@@ -1,7 +1,5 @@
-import Debug from 'debug';
+import { logger } from '../logger'; 
 import channels from '../channels';
-
-const log = Debug('socket');
 
 export default (io, socket) => ({
 
@@ -9,16 +7,19 @@ export default (io, socket) => ({
         const isMobile = data.isMobile;
         const channel = channels.get(socket.handshake.session.channelID);
 
-        if(!channel) {
+        // redirect user if the channel does not exists
+        if(!channels.has(socket.handshake.session.channelID)) {
             socket.emit('redirect');
             return;
         }
 
-        if((isMobile && 'mobile' in channel.connection) || (!isMobile && 'desktop' in channel.connection)) {
+        // redirect user if the channel already has the connection type
+        if((isMobile && channel.hasMobileConnection()) || (!isMobile && channel.hasDesktopConnection())) {
             socket.emit('redirect');
             return;
         }
 
+        // connect user to the channel
         socket.user = {
             id: socket.id,
             name: socket.handshake.session.userName
@@ -35,30 +36,30 @@ export default (io, socket) => ({
         }
 
 
-        log('user %o connected to channel %o', socket.user.name, channel.id);
+        logger.info('user %o connected to channel %o', socket.user.name, channel.id);
         io.in(socket.channel).emit('join-channel', { user: socket.user, connection: channel.connection });
     },
 
     disconnect() {
+        if(!channels.has(socket.channel)) return;
         const channel = channels.get(socket.channel);
 
-        if(!channel) return;
-
-        if(channel.connection.desktop === socket.user || channel.connection.mobile === socket.user) {
+        // delete the channel if the user is connected
+        if(channel.isConnected(socket.user)) {
             channels.delete(socket.channel);
         
-            log('deleting channel %o', socket.channel);
+            logger.info('deleting channel %o', socket.channel);
             socket.in(socket.channel).emit('redirect');
             return;
         }
 
-        log('user %o disconnected to channel %o', socket.user.name, socket.channel);
+        logger.info('user %o disconnected to channel %o', socket.user.name, socket.channel);
     },
 
     deleteChannel() {
         channels.delete(socket.channel);
 
-        log('deleting channel %o', socket.channel);
+        logger.info('deleting channel %o', socket.channel);
         io.in(socket.channel).emit('redirect');
     },
 

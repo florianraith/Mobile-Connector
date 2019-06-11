@@ -1,6 +1,5 @@
-import Debug from 'debug';
+import { logger } from '../logger';
 
-const log = Debug('userName');
 const namePool = ['Freddie', 'Damon', 'Tamara', 'Mitchell', 'Albert', 'Shane', 'Simon'];
 
 export default (req, res, next) => {
@@ -12,9 +11,9 @@ export default (req, res, next) => {
         req.session.userName = userName;
 
         if('oldUserName' in req.session) {
-            log('user %o changed name to %o', req.session.oldUserName, req.session.userName);
+            logger.info('user %o changed name to %o', req.session.oldUserName, req.session.userName);
         } else {
-            log('new user %o', req.session.userName);
+            logger.info('new user %o', req.session.userName);
         }
 
     }

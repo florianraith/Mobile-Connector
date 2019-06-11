@@ -1,8 +1,7 @@
 import server from './server';
-import Debug from 'debug';
+import { logger } from './logger';
 
-const debug = Debug('server');
-debug('booting %o', 'Mobile-Connector');
+logger.info('booting %o', 'Mobile-Connector');
 
 // run server
 const port = process.env.PORT || 8000;
@@ -17,7 +16,7 @@ function onListening() {
     var bind = typeof addr === 'string'
       ? 'pipe ' + addr
       : 'port ' + addr.port;
-    debug('Listening on ' + bind);
+    logger.info('Listening on ' + bind);
   }
 
 

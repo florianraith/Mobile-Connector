@@ -4,20 +4,22 @@ block content
     h1 Home
 
     hr
-    p Username: #{userName}
+    p 
+        | Username: #{userName} <br> 
+        | Connection Type: 
+        span.connectionType= connectionType === 'null' ? 'loading...' : connectionType
     
     form(action="/channel/create", method="POST", style="display: inline-block;")
         input(type="hidden", name="_csrf", value=csrf)
-        input(type="hidden", name="isMobile", value="false")
         button.btn(type="submit") Create Channel
 
     form(action="/newusername", method="POST", style="display: inline-block;")
         input(type="hidden", name="_csrf", value=csrf)
         button.btn(type="submit") New Username
-    
+
     if channels.length !== 0
         p.mt-5 Exsisting channels:
         ul
             each id in channels
                 li
-                    a.channel-link(href="/channel/desktop/" + id + "?mobile=false") Channel: #{id}
+                    a.channel-link(href="/channel/" + connectionType + "/" + id) Channel: #{id}

@@ -10,6 +10,7 @@ import router from './routes';
 import middleware from './middleware';
 import socket from './socket';
 import config from '../config';
+import { requestLogger } from './logger';
 
 const app = express();
 const session = sessionModule({ secret: 'super-duper-secrect-key', resave: false, saveUninitialized: true });
@@ -27,9 +28,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(session);
 app.use(csrf({ cookie: true }));
-app.use(middleware.logger);
+app.use(requestLogger);
 app.use(middleware.userName);
-app.use(middleware.isMobile);
 
 // register routes
 app.use('/', router);
@@ -44,4 +44,4 @@ const server = config.https ? https.createServer(config.httpsOptions, app) : htt
 // handle sockets
 socket(server, cookieParser, session);
 
-module.exports = server;
+export default server;

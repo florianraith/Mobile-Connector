@@ -1,3 +1,5 @@
+import Channel from './channel';
+
 export default {
 
     channels: {},
@@ -7,16 +9,13 @@ export default {
         let randomID = '';
         for(let i = 0; i < 6; i++) randomID += chars[Math.floor(Math.random() * chars.length)];
 
-        this.channels[randomID] = {
-            id: randomID,
-            connection: {}
-        }
+        this.channels[randomID] = new Channel(randomID);
 
         return this.channels[randomID];
     },
 
     has(channelID) {
-        return this.channels[channelID] !== undefined;
+        return channelID && channelID in this.channels;
     },
 
     get(channelID) {

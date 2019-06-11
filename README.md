@@ -7,4 +7,5 @@ Technologies used:
 * [node.js](https://nodejs.org/en/) The backend Javascript-Runtime
 * [express.js](https://expressjs.com/) The backend libary
 * [socket.io](https://socket.io/) The real-time engine
+* [axios](https://github.com/axios/axios) Promise based HTTP client for the browser and node.js
 * [p5.js](https://p5js.org/) A processing port for Javascript, used for the 3D rotating cube

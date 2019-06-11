@@ -4,6 +4,8 @@ html(lang="en")
         meta(charset="UTF-8")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
         meta(http-equiv="X-UA-Compatible", content="ie=edge")
+        meta(name="csrf", content=csrf)
+        meta(name="connectionType", content=connectionType)
         block meta
         link(rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css", integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm", crossorigin="anonymous")
         title= title
@@ -11,10 +13,14 @@ html(lang="en")
         nav.navbar.navbar-light.bg-light
             .container
                 a.navbar-brand.h1.mb-0(href="/") Mobile-Connector
-                .navbar-text#connection-type (as desktop)
+                .navbar-text 
+                    | (
+                    span.connectionType= connectionType === 'null' ? 'loading...' : connectionType
+                    | )
 
         .container.mt-5
             block content
-        script(src="/assets/js/is-mobile.js")
+        script(src="https://unpkg.com/axios/dist/axios.min.js")
+        script(src="/assets/js/identifyConnectionType.js")
         block scripts
         
