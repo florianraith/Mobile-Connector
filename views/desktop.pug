@@ -1,28 +1,5 @@
-extends layout.pug
+extends channel
 
-block meta
-    meta(name="channelID", content=id)
-
-block content
-    h1 Desktop-Channel
-      small.text-secondary  ##{id}
-
-    hr
-
-    table
-        tbody
-            tr
-                td Desktop connection:
-                td.pl-3#desktop-connection null
-            tr
-                td Mobile connection:
-                td.pl-3#mobile-connection null
-
+block view
     #canvas
-
     button#delete-channel.btn Delete This Channel
-
-block scripts
-    script(src="/socket.io/socket.io.js")
-    script(src="/assets/js/p5.min.js")
-    script(src="/assets/js/desktop.js")

@@ -3,13 +3,18 @@ window.addEventListener('load', function() {
     var $connectionType = document.querySelector('[name="connectionType"]');
     var $connectionTypeTexts = document.getElementsByClassName('connectionType');
     var csrf = document.querySelector('[name="csrf"]').content;
+    var event = new Event('identifiedconnection');
 
     // dont execute the script if the connection type is already set
-    if($connectionType.content !== 'null') return;
+    if($connectionType.content !== 'null') {
+        window.dispatchEvent(event);
+        return;
+    }
     
     // set connection type to desktop if there is no deviceorientation event
     if(!('ondeviceorientation' in window)) {
         setConnectionType('desktop');
+        window.dispatchEvent(event);
         return;
     }
 
@@ -42,6 +47,7 @@ window.addEventListener('load', function() {
             for(var i in $connectionTypeTexts) {
                 $connectionTypeTexts[i].innerHTML = connectionType;
             }
+            window.dispatchEvent(event);
         });
     }
 

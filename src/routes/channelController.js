@@ -2,20 +2,22 @@ import channels from '../channels';
 
 export default {
 
-    dekstop(req, res) {
-        const id = req.params.id;
-        const csrf = req.csrfToken();
-        const title = `Desktop - ${id}`;
+    view(req, res) {
+        // TODO: if connection type isn't set yet, render an empty page, wait for the connection type to be set, rerender the page
+        if(!('connectionType' in req.session)) {
+            res.redirect('/');
+        }
+
+        const channelID = req.params.id;
         const connectionType = req.session.connectionType || 'null';
-        const userName = req.session.userName;
-        
+
         // redirect if the channel does not exsist
-        if(!channels.has(id)) {
+        if(!channels.has(channelID)) {
             res.redirect('/');
             return;
         }
-        
-        const channel = channels.get(id);
+
+        const channel = channels.get(channelID);
 
         // redirect if the channel is already full
         if(channel.isFull()) {
@@ -23,62 +25,27 @@ export default {
             return;
         }
 
-        // redirect if the client is a mobile and a mobile already is in the channel and the same with desktop
-        if('connectionType' in req.session) {
-            if(req.session.connectionType === 'mobile' && channel.hasMobileConnection()) {
-                res.redirect('/');
-                return;
-            }
-
-            if(req.session.connectionType === 'desktop' && channel.hasDesktopConnection()) {
-                res.redirect('/');
-                return;
-            }
+        // redirect if connection type is mobile and a mobile connection already exists in the channel
+        if(connectionType === 'mobile' && channel.hasMobileConnection()) {
+            res.redirect('/');
+            return;
         }
 
-        // render page
-        req.session.channelID = channel.id;
-        res.render('desktop', { id, csrf, title, connectionType, userName });
-    },
+        // redirect if connection type is desktop and a desktop connection already exists in the channel
+        if(connectionType === 'desktop' && channel.hasDesktopConnection()) {
+            res.redirect('/');
+            return;
+        }
 
-    mobile(req, res) {
-        const id = req.params.id;
-        const title = `Mobile - ${id}`;
-        const connectionType = req.session.connectionType || 'null';
+        // save channel id into session
+        req.session.channelID = channelID;
+
+        // render page
+        const title = 'Channel ' + channelID;
         const userName = req.session.userName;
-        
-        // redirect if the channel does not exsist
-        if(!channels.has(id)) {
-            res.redirect('/');
-            return;
-        }
-        
-        const channel = channels.get(id);
-
-        // redirect if the channel is already full
-        if(channel.isFull()) {
-            res.redirect('/');
-            return;
-        }
-        
-        // redirect if the client is a desktop or the client is a mobile and a mobile already is in the channel
-        if('connectionType' in req.session) {
-            if(req.session.connectionType === 'desktop') {
-                res.redirect('/');
-                return; 
-            }
-            
-            if(req.session.connectionType === 'mobile' && channel.hasMobileConnection()) {
-                res.redirect('/');
-                return;
-            }
-        }
-
-        // render page
-        req.session.channelID = channel.id;
-        res.render('mobile', { id, title, connectionType, userName });
+        res.render(connectionType, { channelID, title, connectionType, userName });
     },
-
+ 
     create(req, res) {
         if(!('connectionType' in req.session)) {
             res.redirect('/');
@@ -86,7 +53,7 @@ export default {
         }
 
         const channel = channels.create();
-        res.redirect(`/channel/${req.session.connectionType}/${channel.id}`);
+        res.redirect(`/channel/${channel.id}`);
     },
 
     

@@ -3,18 +3,20 @@ import channels from '../channels';
 
 export default (io, socket) => ({
 
-    joinChannel(data) {
-        const isMobile = data.isMobile;
-        const channel = channels.get(socket.handshake.session.channelID);
+    joinChannel() {
+        const connectionType = socket.handshake.session.connectionType;
+        const channelID = socket.handshake.session.channelID;
 
         // redirect user if the channel does not exists
-        if(!channels.has(socket.handshake.session.channelID)) {
+        if(!channels.has(channelID)) {
             socket.emit('redirect');
             return;
         }
 
+        const channel = channels.get(channelID);
+
         // redirect user if the channel already has the connection type
-        if((isMobile && channel.hasMobileConnection()) || (!isMobile && channel.hasDesktopConnection())) {
+        if(channel.hasConnectionOfType(connectionType)) {
             socket.emit('redirect');
             return;
         }
@@ -28,15 +30,10 @@ export default (io, socket) => ({
         socket.channel = channel.id;
         socket.join(socket.channel);
 
-
-        if(isMobile) {
-            channel.connection.mobile = socket.user;
-        } else {
-            channel.connection.desktop = socket.user;
-        }
+        channel.connect(connectionType, socket.user);
 
         logger.info('user %o connected to channel %o', socket.user.name, channel.id);
-        io.in(socket.channel).emit('join-channel', { user: socket.user, connection: channel.connection });
+        io.in(socket.channel).emit('new-connection', { user: socket.user, connection: channel.connection, connectionType });
     },
 
     disconnect() {
@@ -55,6 +52,7 @@ export default (io, socket) => ({
         logger.info('user %o disconnected to channel %o', socket.user.name, socket.channel);
     },
 
+    // TODO: handle channel deletion as ajax request
     deleteChannel() {
         channels.delete(socket.channel);
 

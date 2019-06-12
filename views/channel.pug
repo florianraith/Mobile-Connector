@@ -1,0 +1,36 @@
+extends layout.pug
+
+block meta
+    meta(name="channelID", content=channelID)
+
+block content
+    h1 #{connectionType.charAt(0).toUpperCase() + connectionType.slice(1)}-Channel
+      small.text-secondary  ##{channelID}
+
+    hr
+
+    table
+        tbody
+            tr
+                td Desktop connection:
+                if  connectionType === 'desktop'
+                    td.pl-3#desktop-connection #{userName} 
+                        span.text-secondary
+                            em (you)
+                else 
+                    td.pl-3#desktop-connection not connected
+            tr
+                td Mobile connection:
+                if  connectionType === 'mobile'
+                    td.pl-3#mobile-connection #{userName} 
+                        span.text-secondary
+                            em (you)
+                else 
+                    td.pl-3#mobile-connection not connected
+
+    block view
+
+block scripts
+    script(src="/socket.io/socket.io.js")
+    script(src="/assets/js/p5.min.js")
+    script(src="/assets/js/script.js")
