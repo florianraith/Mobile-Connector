@@ -15,8 +15,8 @@ export default (io, socket) => ({
 
         const channel = channels.get(channelID);
 
-        // redirect user if the channel already has the connection type
-        if(channel.hasConnectionOfType(connectionType)) {
+        // redirect if the channel is already full or if the channel already has a connection of given type
+        if(channel.isFull() || channel.hasConnectionOfType(connectionType)) {
             socket.emit('redirect');
             return;
         }

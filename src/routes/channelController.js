@@ -19,20 +19,8 @@ export default {
 
         const channel = channels.get(channelID);
 
-        // redirect if the channel is already full
-        if(channel.isFull()) {
-            res.redirect('/');
-            return;
-        }
-
-        // redirect if connection type is mobile and a mobile connection already exists in the channel
-        if(connectionType === 'mobile' && channel.hasMobileConnection()) {
-            res.redirect('/');
-            return;
-        }
-
-        // redirect if connection type is desktop and a desktop connection already exists in the channel
-        if(connectionType === 'desktop' && channel.hasDesktopConnection()) {
+        // redirect if the channel is already full or if the channel already has a connection of given type
+        if(channel.isFull() || channel.hasConnectionOfType(connectionType)) {
             res.redirect('/');
             return;
         }
