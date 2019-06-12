@@ -1,0 +1,3 @@
+* secure socket connection
+* use three.js instead of p5 for 3d cube
+* use vue as frontend framework

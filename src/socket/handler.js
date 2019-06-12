@@ -35,7 +35,6 @@ export default (io, socket) => ({
             channel.connection.desktop = socket.user;
         }
 
-
         logger.info('user %o connected to channel %o', socket.user.name, channel.id);
         io.in(socket.channel).emit('join-channel', { user: socket.user, connection: channel.connection });
     },
@@ -43,13 +42,13 @@ export default (io, socket) => ({
     disconnect() {
         if(!channels.has(socket.channel)) return;
         const channel = channels.get(socket.channel);
+        channel.disconnect(socket.user);
 
-        // delete the channel if the user is connected
-        if(channel.isConnected(socket.user)) {
+        // delete the channel if the channel is empty
+        if(channel.isEmpty()) {
             channels.delete(socket.channel);
         
             logger.info('deleting channel %o', socket.channel);
-            socket.in(socket.channel).emit('redirect');
             return;
         }
 
