@@ -10,5 +10,7 @@ export default (err, req, res, next) => {
         res.render('404');
         return;
     }
+
+    if(err.status !== 404) console.log(err);
     res.render('error');
 }

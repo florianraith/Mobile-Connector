@@ -44,7 +44,7 @@ window.addEventListener('identifiedconnection', function() {
 
         redirect: function() {
             window.location.replace(window.location.origin + '/'); 
-        }
+        },
 
     };
 
@@ -53,6 +53,7 @@ window.addEventListener('identifiedconnection', function() {
     socket.emit('join-channel');
     socket.on('new-connection', socketHandler.newConnection);
     socket.on('redirect', socketHandler.redirect);
+    socket.on('disconnect', socketHandler.redirect);
 
     if(connectionType === 'desktop') {
         socket.on('device-orientation', socketHandler.deviceOrientation);
@@ -76,13 +77,12 @@ window.addEventListener('identifiedconnection', function() {
                 sketch.box();
             }
         
-        
         }, 'canvas');
 
         // setup delete channel button handler
-        $btnDeleteChannel.onclick = function() {
-            socket.emit('delete-channel');
-        }
+        $btnDeleteChannel.addEventListener('click', function() {
+            axios.post('/channel/delete', { _csrf: csrf });
+        });
     }
 
     if(connectionType === 'mobile') {

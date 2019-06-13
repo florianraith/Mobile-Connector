@@ -1,10 +1,12 @@
 import sio from 'socket.io';
 import handlerFactory from './handler'; 
 
+export let io;
+
 export default (server, cookieParser, session) => {
     
     // configure socket.io
-    const io = sio(server);
+    io = sio(server);
     io.use((socket, next) => {
         const req = socket.handshake;
         const res = {};
@@ -21,7 +23,6 @@ export default (server, cookieParser, session) => {
 
         socket.on('join-channel', handler.joinChannel);
         socket.on('disconnect', handler.disconnect);
-        socket.on('delete-channel', handler.deleteChannel);
         socket.on('device-orientation', handler.deviceOrientation);
         socket.on('calibrate-orientation', handler.calibrateOrientation);
 

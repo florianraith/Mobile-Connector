@@ -10,5 +10,6 @@ router.post('/setconnectiontype', mainController.setConnectionType);
 
 router.get('/channel/:id', channelController.view);
 router.post('/channel/create', channelController.create);
+router.post('/channel/delete', channelController.delete);
 
 export default router;

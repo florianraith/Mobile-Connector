@@ -1,4 +1,5 @@
 import channels from '../channels';
+import { io } from '../socket';
 
 export default {
 
@@ -6,6 +7,7 @@ export default {
         // TODO: if connection type isn't set yet, render an empty page, wait for the connection type to be set, rerender the page
         if(!('connectionType' in req.session)) {
             res.redirect('/');
+            return;
         }
 
         const channelID = req.params.id;
@@ -31,7 +33,8 @@ export default {
         // render page
         const title = 'Channel ' + channelID;
         const userName = req.session.userName;
-        res.render(connectionType, { channelID, title, connectionType, userName });
+        const csrf = req.csrfToken();
+        res.render(connectionType, { channelID, title, csrf, connectionType, userName });
     },
  
     create(req, res) {
@@ -44,6 +47,24 @@ export default {
         res.redirect(`/channel/${channel.id}`);
     },
 
-    
+    delete(req, res) {
+        const channelID = req.session.channelID;
+        if(!channels.has(channelID)) {
+            res.json({ failed: true });
+            return;
+        }
+
+        // disconnect all connections in this channel
+        // the channel deletion itself will be handled by the socket handler once all clients are disconnected
+        io.in(channelID).clients((error, clients) => {
+            if(error) throw error;
+
+            for(let client of clients) {
+                io.sockets.connected[client].disconnect(true);
+            }
+        });
+                
+        res.json({ success: true });
+    }
 
 };

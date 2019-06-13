@@ -1,11 +1,12 @@
+* dont allow multiple connections for one user
 * update dom connection list when a user disconnects from a channel
 * if a user joins a channel without having a connection type in their session, don't redirect to index,
   instead let him on the channel site to determine his connection type, which is sent via ajax. 
   the response determines whether the user is allowed to connect to the channel or not.
-* handle channel deletion as http request
 * handle new username via ajax
 * add linter
 * secure socket connection
 * add flash messages
+* fix 3d cube rotation
 * use three.js instead of p5 for 3d cube
 * use vue as frontend framework

@@ -28,6 +28,18 @@ export default class Channel {
         return false;
     }
 
+    getConnectionByName(userName) {
+        if(this.hasDesktopConnection() && this.connection.desktop.name === userName) {
+            return this.connection.desktop;
+        }
+
+        if(this.hasMobileConnection() && this.connection.mobile.name === userName) {
+            return this.connection.mobile;
+        }
+
+        return null;
+    }
+
     isFull() {
         return this.hasMobileConnection() && this.hasDesktopConnection();
     }

@@ -46,18 +46,9 @@ export default (io, socket) => ({
             channels.delete(socket.channel);
         
             logger.info('deleting channel %o', socket.channel);
-            return;
         }
 
-        logger.info('user %o disconnected to channel %o', socket.user.name, socket.channel);
-    },
-
-    // TODO: handle channel deletion as ajax request
-    deleteChannel() {
-        channels.delete(socket.channel);
-
-        logger.info('deleting channel %o', socket.channel);
-        io.in(socket.channel).emit('redirect');
+        logger.info('user %o disconnected from channel %o', socket.user.name, socket.channel);
     },
 
     deviceOrientation(data) {   
