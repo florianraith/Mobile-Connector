@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "./node_modules/.bin/babel src --copy-files --out-dir dist --presets=@babel/preset-env",
+    "build": "./node_modules/.bin/babel src --copy-files --out-dir dist/app --presets=@babel/preset-env && node copybuildfiles.js",
     "watch": "./node_modules/.bin/nodemon --watch src --exec \"./node_modules/.bin/babel-node src --presets=@babel/preset-env\"",
-    "dev": "./node_modules/.bin/cross-env DEBUG=server,http,socket,userName npm run watch"
+    "dev": "./node_modules/.bin/cross-env DEBUG=server,http,socket,userName npm run watch",
+    "start": "node ./dist/app/index.js"
   },
   "author": "Florian Raith",
   "license": "ISC",
@@ -28,6 +29,7 @@
     "@babel/node": "^7.4.5",
     "@babel/preset-env": "^7.4.5",
     "cross-env": "^5.2.0",
+    "fs-extra": "^8.1.0",
     "nodemon": "^1.19.0"
   }
 }
